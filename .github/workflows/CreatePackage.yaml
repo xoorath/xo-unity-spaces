@@ -1,0 +1,50 @@
+# This script uses the example workflow from https://github.com/marketplace/actions/create-unitypackage
+# That workflow is released with the MIT license: https://raw.githubusercontent.com/pCYSl5EDgo/create-unitypackage/master/LICENSE
+# MIT License
+# 
+# Copyright (c) 2020 pCYSl5EDgo
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+name: Create Unity Package
+
+on: push
+
+jobs:
+  create-package:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - run: |
+        echo "Assets/xo-unity-spaces.meta" > metaList
+        find Assets/xo-unity-spaces/ -name \*.meta >> metaList
+        mkdir package-temp
+
+    #prepend xo-unity-spaces because create-unitypackage doesn't support working-directory
+    - uses: pCYSl5EDgo/create-unitypackage@v1.1.1
+      with:
+        package-path: 'package-temp/xo-unity-spaces.unitypackage'
+        include-files: metaList
+
+    #prepend xo-unity-spaces because upload-artifact doesn't support working-directory
+    - uses: actions/upload-artifact@v3
+      with:
+        path: package-temp
+        name: xo-unity-spaces
