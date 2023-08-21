@@ -33,17 +33,15 @@ jobs:
     - uses: actions/checkout@v2
 
     - run: |
-        echo "Assets/xo-unity-spaces.meta" > metaList
-        find Assets/xo-unity-spaces/ -name \*.meta >> metaList
+        echo "Assets/xo.meta" > metaList
+        find Assets/xo/ -name \*.meta >> metaList
         mkdir package-temp
 
-    #prepend xo-unity-spaces because create-unitypackage doesn't support working-directory
     - uses: pCYSl5EDgo/create-unitypackage@v1.1.1
       with:
         package-path: 'package-temp/xo-unity-spaces.unitypackage'
         include-files: metaList
 
-    #prepend xo-unity-spaces because upload-artifact doesn't support working-directory
     - uses: actions/upload-artifact@v3
       with:
         path: package-temp

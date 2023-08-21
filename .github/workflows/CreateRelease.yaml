@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
 
       - name: Download
         uses: dawidd6/action-download-artifact@v2
@@ -29,12 +31,12 @@ jobs:
           name_is_regexp: false
           path: package-temp
 
+      - uses: spenserblack/actions-tag-to-release@v2.0.0
+
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: |
-            package-temp/xo-unity-spaces.unitypackage
+          files: package-temp/xo-unity-spaces.unitypackage
 
 
 
