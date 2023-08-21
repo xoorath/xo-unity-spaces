@@ -26,6 +26,7 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: CreatePackage.yaml
           workflow_conclusion: success
+          commit: ${{github.event.pull_request.head.sha}}
           event: push
           name: xo-unity-spaces
           name_is_regexp: false
